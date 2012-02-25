@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Drutube abuse feature.
+ */
+
+include_once('drutube_abuse.features.inc');
