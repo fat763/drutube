@@ -49,10 +49,10 @@ function drutube_misc_field_formatter_view($entity_type, $entity, $field, $insta
       $terms = taxonomy_term_load_multiple($tids);
       foreach ($terms as $term) {
         $element[$delta] = array(
-            '#type' => 'link',
-            '#title' => $term->name,
-            '#href' => 'video',
-            '#options' => array('query' => array('f[0]' => 'field_term_topics:'.$term->tid)),
+          '#type' => 'link',
+          '#title' => $term->name,
+          '#href' => 'video',
+          '#options' => array('query' => array('f[0]' => $instance['field_name'].':'.$term->tid)),
           );
         $delta++;
       }
