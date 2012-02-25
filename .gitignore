@@ -3,7 +3,7 @@
 sites/*/files
 sites/*/files/*
 files/*
-
+sites/*/settings.php
 # Packages #
 ############
 *.7z
