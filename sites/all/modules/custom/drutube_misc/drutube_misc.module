@@ -1,0 +1,7 @@
+<?php 
+function drutube_misc_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'vud') {
+    return $plugin;
+    dpm("Yes");
+  }
+}
