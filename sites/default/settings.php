@@ -519,4 +519,11 @@ $conf['404_fast_html'] = '<html xmlns="http://www.w3.org/1999/xhtml"><head><titl
  * the leading hash sign below.
  */
 # $conf['pressflow_smart_start'] = TRUE;
+ $databases['default']['default'] = array(
+   'driver' => 'mysql',
+   'database' => 'drutube.local',
+   'username' => 'root',
+   'password' => '',
+   'host' => 'localhost',
+ );
 
