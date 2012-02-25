@@ -1,0 +1,13 @@
+; $Id: ctr_field.info,v 1.1 2011/01/19 13:34:22 darthsteven Exp $
+name = "Certified To Rock field"
+description = "Exposes a field for certifiedtorock.com scores"
+
+core = 7.x
+php = 5.2
+
+; Information added by drupal.org packaging script on January 1, 1970 - 00:00
+version = "7.x-1.0"
+core = "7.x"
+project = "ctr_field"
+datestamp = "1295445103"
+

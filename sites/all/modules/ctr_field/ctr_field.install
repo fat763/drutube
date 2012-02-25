@@ -1,0 +1,30 @@
+<?php
+
+// $Id: ctr_field.install,v 1.1 2011/01/19 13:34:22 darthsteven Exp $
+
+/**
+ * Implements hook_field_schema().
+ *
+ * This defines the actual database schema of the field, using the format
+ * used by the Schema API.
+ *
+ * The actual data we store here is a drupal.org uid, the current CTR score, and
+ * the last time it was refreshed in this entity.
+ *
+ * @see hook_field_schema()
+ */
+function ctr_field_field_schema($field) {
+  $columns = array(
+    'uid' => array('type' => 'int', 'not null' => FALSE),
+    'rating' => array('type' => 'int', 'not null' => FALSE),
+    'refreshed' => array('type' => 'int', 'not null' => FALSE),
+  );
+  $indexes = array(
+    'uid_rating' => array('uid', 'rating'),
+    'refreshed' => array('refreshed'),
+  );
+  return array(
+    'columns' => $columns,
+    'indexes' => $indexes,
+  );
+}

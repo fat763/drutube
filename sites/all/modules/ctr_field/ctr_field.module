@@ -1,0 +1,307 @@
+<?php
+// $Id: ctr_field.module,v 1.1 2011/01/19 13:34:22 darthsteven Exp $
+
+/**
+ * @file
+ * Defines CTR field type.
+ */
+
+
+/**
+ * Implements hook_help().
+ */
+function ctr_field_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#ctr_field':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The Certified To Rock field module defines a field that can lookup a users rating on certifiedtorock.com. See the <a href="@field-help">Field module help page</a> for more information about fields.', array('@field-help' => url('admin/help/field'))) . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_field_info().
+ *
+ * Provides the description of the field.
+ */
+function ctr_field_field_info() {
+  return array(
+    'ctr_field' => array(
+      'label' => t('CTR Rating'),
+      'description' => t('Aggregates a Certified To Rock rating.'),
+      'instance_settings' => array('update_on_cron' => TRUE,),
+      'default_widget' => 'field_ctr_text',
+      'default_formatter' => 'field_ctr_simple_rating',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_settings_form().
+ */
+function ctr_field_field_instance_settings_form($field, $instance) {
+  $settings = $instance['settings'];
+  $form = array();
+
+  $form['update_on_cron'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Update on cron'),
+    '#default_value' => $settings['update_on_cron'],
+    '#description' => t('Update the Certified To Rock rankings stored every week.'),
+  );
+
+  return $form;
+}
+
+/**
+ * Implements hook_field_validate().
+ *
+ * Verifies that the field's uid component is known to CTR.
+ */
+function ctr_field_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  foreach ($items as $delta => $item) {
+    if (!empty($item['uid'])) {
+      if (ctr_field_ctr_rating($item['uid']) === FALSE) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'ctr_field_not_found',
+          'message' => t('User is unknown to the Certified To Rock service.'),
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_presave().
+ *
+ * Updates the fields rating and refresh properties from the given uid.
+ */
+function ctr_field_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  foreach ($items as $delta => $item) {
+    if (!empty($item['uid'])) {
+      if ($rating = ctr_field_ctr_rating($item['uid'])) {
+        $items[$delta]['rating'] = $rating;
+        $items[$delta]['refreshed'] = REQUEST_TIME;
+      }
+    }
+    else {
+      $items[$delta]['rating'] = $items[$delta]['refreshed'] = NULL;
+    }
+  }
+}
+
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function ctr_field_field_is_empty($item, $field) {
+  return empty($item['uid']);
+}
+
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * A simple widget is provided that is text-only widget where the user enters
+ * their Drupal.org user ID. It also shows their current rating, if known.
+ */
+function ctr_field_field_widget_info() {
+  return array(
+    'field_ctr_text' => array(
+      'label' => t('Textfield'),
+      'field types' => array('ctr_field'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * Add our uid element for entering the Drupal.org uid of the user, and an
+ * element for showing the rating of the user if we know it.
+ */
+function ctr_field_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $value = isset($items[$delta]['uid']) ? $items[$delta]['uid'] : '';
+
+  $element['uid'] = array();
+  $element += array(
+    '#delta' => $delta,
+    '#element_validate' => array('ctr_field_text_widget_validate'),
+    '#type' => 'fieldset',
+    '#title' => $instance['label'],
+    '#description' => $instance['description'],
+  );
+
+  $element['uid'] += array(
+    '#title' => t('Linked user'),
+    '#type' => 'textfield',
+    '#default_value' => $value,
+    '#description' => t('Enter your drupal.org uid'),
+    '#required' => $instance['required'],
+  );
+
+  if (!empty($items[$delta]['rating'])) {
+    $element['rating_readonly'] = array(
+      '#type' => 'item',
+      '#title' => t('Current rating'),
+      '#markup' => t('@rating, refreshed @interval ago', array('@rating' => $items[$delta]['rating'], '@interval' => format_interval(time() - $items[$delta]['refreshed']))),
+    );
+  }
+
+
+  return $element;
+}
+
+/**
+ * Validate the uid element of the simple ctr_field widget.
+ */
+function ctr_field_text_widget_validate($element, &$form_state) {
+  $instance = field_widget_instance($element, $form_state);
+
+  $delta = $element['#delta']; // TODO: Isn't there a better way to find out which element?
+  $field = $form_state['field'][$element['#field_name']][$element['#language']]['field'];
+  $field_name = $field['field_name'];
+
+  if (isset($form_state['values'][$field_name][$element['#language']][$delta])) {
+    $values = $form_state['values'][$field_name][$element['#language']][$delta];
+    if (!empty($values['uid'])) {
+      $regexp = '@[^-0-9]@';
+      $message = t('Please enter a valid user ID %field.', array('%field' => t($instance['label'])));
+      if ($values['uid'] != preg_replace($regexp, '', $values['uid'])) {
+        form_error($element, $message);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ *
+ * Just bubble any field errors up to the FormAPI.
+ */
+function ctr_field_field_widget_error($element, $error, $form, &$form_state) {
+  switch ($error['error']) {
+    case 'ctr_field_not_found':
+      form_error($element, $error['message']);
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Provide a simple formatter as number, optionally linked to
+ * certifiedtorock.com.
+ */
+function ctr_field_field_formatter_info() {
+  return array(
+    'field_ctr_simple_rating' => array(
+      'label' => t('Simple CTR rating formatter'),
+      'field types' => array('ctr_field'),
+      'settings' => array(
+        'make_link' => TRUE,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function ctr_field_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $element = array();
+
+  $element['make_link'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Display as link to certifiedtorock.com'),
+    '#default_value' => $settings['make_link'],
+  );
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function ctr_field_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $summary = array();
+  if ($settings['make_link']) {
+    $summary[] = t('Display as link to certifiedtorock.com.');
+  }
+
+  return implode('<br />', $summary);
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function ctr_field_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'field_ctr_simple_rating':
+      foreach ($items as $delta => $item) {
+        if ($settings['make_link']) {
+          $element[$delta]['#markup'] = l($item['rating'], 'http://certifiedtorock.com/u/' . $item['uid']);
+        }
+        else {
+          $element[$delta]['#markup'] = check_plain($item['rating']);
+        }
+
+      }
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Get the CTR rating for the given uid.
+ *
+ * It is safe to call this function lots of times in a page request, or very
+ * frequently for the same uid, as the results are cached.
+ */
+function ctr_field_ctr_rating($uid) {
+  $ratings = &drupal_static(__FUNCTION__);
+  if (!isset($ratings[$uid])) {
+    $ratings[$uid] = _ctr_field_ctr_rating($uid);
+  }
+  return $ratings[$uid];
+}
+
+/**
+ * Get the actual CTR rating.
+ *
+ * We try to retrieve from cache, but if that fails, we call through to the CTR
+ * webservice to get the users rating.
+ */
+function _ctr_field_ctr_rating($uid) {
+  // Can we get it from the cache.
+  if ($cache = cache_get(__FUNCTION__ . ':' . $uid)) {
+    return $cache->data['rating'];
+  }
+
+  // Cache fail, go get it from the webservice.
+  $url = 'http://certifiedtorock.com/u/' . $uid . '/json';
+  $response = drupal_http_request($url);
+  if ($response->code == 200) {
+    $data = json_decode($response->data);
+    if (!empty($data->ctr_score)) {
+      $score = $data->ctr_score;
+      // Store in the cache table for a day.
+      cache_set(__FUNCTION__ . ':' . $uid, array('rating' => $score), 'cache', strtotime('+1 day', REQUEST_TIME));
+      return $score;
+    }
+  }
+
+  return FALSE;
+}
