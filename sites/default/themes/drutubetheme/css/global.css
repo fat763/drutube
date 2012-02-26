@@ -1,2 +1,184 @@
 /* This file will hold styles for the mobile version of your website (mobile first). */
 /* This also can include ANY global CSS that applies site-wide. Unless overwritten by a more specific style rule, CSS declarations in global.css will apply site-wide. */
+
+.node-video.node-teaser .group-left {
+  width: 30%;
+}
+
+.node-video.node-teaser .group-right {
+  width: 70%;
+  float: left;
+}
+
+.node-video .field-name-field-video {
+
+}
+
+.node-video .vud-widget-updown {
+  margin-right: 10px;
+}
+
+.view .node-video {
+  padding: 10px;
+  border: solid 1px #CCC;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.view .group-footer {
+  text-align: right;
+}
+
+.view-id-video_blocks .video {
+  float: left;
+  margin-right: 5px
+}
+
+.view-id-video_blocks .name .label {
+  font-weight: bold;
+}
+
+.view-id-video_blocks .fields-wrapper {
+  clear: both;
+}
+
+.view-id-video_blocks .views-row {
+  margin-bottom: 15px;
+  padding: 5px;
+  border: solid 1px #CCC;
+  border-radius: 10px;
+}
+
+.view-id-video_blocks .views-row-last {
+  margin-bottom: 0px;
+}
+
+.view-id-video_blocks .views-row-first {
+  margin-top: 10px;
+}
+
+
+/*       Cats page        */
+.context-categories section {
+  width: 29%;
+  float: left; 
+  margin-bottom: 15px;
+}
+
+#zone-branding #region-menu-main {
+  position: absolute;
+  right: 0;
+}
+
+#zone-branding #region-menu-main ul {
+  text-align: right;
+}
+
+#zone-branding #region-menu-main ul li {
+  display: inline;
+}
+.branding-data {
+  float: left;
+}
+
+#region-branding #main-menu {
+  
+}
+
+#region-branding #main-menu li a {
+    -moz-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+    box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+    background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff', endColorstr='#378de5');
+    background-color:#79bbff;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    border:2px solid #84bbf3;
+    display:inline-block;
+    color:#ffffff;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px #528ecc;
+}
+
+#region-branding #main-menu li a:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+    background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#378de5', endColorstr='#79bbff');
+    background-color:#378de5;
+}
+
+#region-branding #main-menu li a:active {
+    position:relative;
+    top:1px;
+}
+
+#region-branding .navigation {
+    float: left;
+    margin-left: 15px;
+    margin-top: 23px;
+}
+
+
+
+
+#zone-footer-wrapper {
+  padding-top: 25px;
+  border-top: 3px solid #CCC;
+  margin-top: 30px;
+  clear: both;
+}
+
+
+
+
+
+
+#block-menu-menu-bottom-menu .menu li {
+  display: inline;
+}
+
+#block-menu-menu-bottom-menu .menu li a {
+    -moz-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+    box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+    background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff', endColorstr='#378de5');
+    background-color:#79bbff;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    border:2px solid #84bbf3;
+    display:inline-block;
+    color:#ffffff;
+    font-family:arial;
+    font-size:13px;
+    font-weight:bold;
+    padding:6px 12px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px #528ecc;
+}
+
+#block-menu-menu-bottom-menu .menu li a:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+    background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#378de5', endColorstr='#79bbff');
+    background-color:#378de5;  
+}
+
+#block-menu-menu-bottom-menu .menu li a:active {
+    position:relative;
+    top:1px;
+}
+
+#region-footer-second .block {
+  float: left;
+  margin: 20px 20px 0;
+}
