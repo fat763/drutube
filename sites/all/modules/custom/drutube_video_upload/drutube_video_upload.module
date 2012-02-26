@@ -45,4 +45,18 @@ function drutube_video_upload_video_and_push_to_media ($node) {
   node_save($node);
 }
 
-// ToDo: add validator to node_form to prevent upload both video fields
+function drutube_video_upload_form_video_node_form_alter (&$form, &$form_state) {  
+  $form['#validate'][] = 'drutube_video_upload_form_video_node_form_validate';
+}
+
+function drutube_video_upload_form_video_node_form_validate (&$form, &$form_state) {
+  $media_fid = $form_state['values']['field_video'][LANGUAGE_NONE][0]['fid'];
+  $upload_fid = $form_state['values']['field_video_upload'][LANGUAGE_NONE][0]['fid'];
+  if (empty($media_fid) && empty($upload_fid)) {
+    form_set_error('field_video_upload', t('Video and Video Upload fields can not be blank both'));
+    form_set_error('field_video');
+  } elseif (!empty($media_fid) && !empty($upload_fid)) {
+    form_set_error('field_video_upload', t('Video and Video Upload fields can not be filled both'));
+    form_set_error('field_video');
+  }
+}
