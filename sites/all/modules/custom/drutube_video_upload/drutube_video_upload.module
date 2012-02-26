@@ -1,0 +1,48 @@
+<?php
+/**
+ * @file
+ */
+define('DRUTUBE_VIDEO_UPLOAD_NODE_TYPE', 'video');
+define('DRUTUBE_VIDEO_UPLOAD_FIELD_NAME', 'field_video_upload');
+
+/**
+ * hook_node_insert implementation().
+ */
+function drutube_video_upload_node_insert ($node) {
+  // if field_upload exist, filled and content type
+  //   upload to youtube.
+  if ($node->type == DRUTUBE_VIDEO_UPLOAD_NODE_TYPE 
+    && empty($node->field_video[LANGUAGE_NONE][0]['fid']) && !empty($node->field_video_upload[LANGUAGE_NONE][0])) {
+    drutube_video_upload_video_and_push_to_media ($node);
+  }
+}
+
+/**
+ * hook_node_update implementation().
+ */
+function drutube_video_upload_node_update ($node) {
+  if ($node->type == DRUTUBE_VIDEO_UPLOAD_NODE_TYPE
+    && empty($node->field_video[LANGUAGE_NONE][0]['fid']) && !empty($node->field_video_upload[LANGUAGE_NONE][0])) {
+    // ToDo: in some reason, the video not uploaded on first edit. Have to fix it.
+    drutube_video_upload_video_and_push_to_media ($node);
+  }
+}
+
+function drutube_video_upload_video_and_push_to_media ($node) {
+  video_upload_cron();
+  $node = node_load($node->nid);
+  $video_id = $node->field_video_upload[LANGUAGE_NONE][0]['video_id'];
+  if(empty($video_id)) {
+    return;
+  }
+  $url = 'http://www.youtube.com/watch?v='.$video_id;
+  $file = media_parse_to_file($url);
+
+  $node->field_video[LANGUAGE_NONE][0]['fid'] = $file->fid;
+
+  drupal_set_message(t('Video player will be able in a few minutes.'));
+  // recursion is possible here, be careful
+  node_save($node);
+}
+
+// ToDo: add validator to node_form to prevent upload both video fields

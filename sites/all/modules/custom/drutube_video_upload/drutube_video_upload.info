@@ -1,0 +1,6 @@
+name = "Drutube video upload"
+description = "Drutube video upload"
+core = "7.x"
+package = "Drutube"
+
+dependencies[] = "video_upload"
