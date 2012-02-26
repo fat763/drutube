@@ -25,6 +25,10 @@
   margin-bottom: 15px;
 }
 
+.view .node-video .field-name-field-video img {
+  border-radius: 10px;
+}
+
 .view .group-footer {
   text-align: right;
 }
@@ -46,6 +50,10 @@
   margin-bottom: 15px;
   padding: 5px;
   border: solid 1px #CCC;
+  border-radius: 10px;
+}
+
+.view-id-video_blocks .views-row .video img {
   border-radius: 10px;
 }
 
