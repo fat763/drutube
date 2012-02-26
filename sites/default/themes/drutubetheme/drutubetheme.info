@@ -5,6 +5,7 @@ engine = 'phptemplate'
 screenshot = 'screenshot.png'
 base theme = 'omega'
 project = 'Drutube'
+version = 1.1
 regions[page_top] = 'Page Top'
 regions[page_bottom] = 'Page Bottom'
 regions[content] = 'Content'
