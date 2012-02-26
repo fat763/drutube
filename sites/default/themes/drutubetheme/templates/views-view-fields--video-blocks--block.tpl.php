@@ -26,7 +26,7 @@
 <div class="video"><?php print($fields['php']->content ); ?></div>
 <div class="title"><?php print($fields['title']->content ); ?></div>
 <div class="fields-wrapper">
-  <div class="changed"><?php print($fields['changed']->content ); ?></div>
-  <div class="name"><span class="label"><?php print($fields['name']->label);?>:&nbsp;<?php print($fields['name']->content ); ?></div>
-  <div class="votes"><?php print($fields['value']->content ); ?></div>
+  <span class="changed"><?php print($fields['changed']->content); ?></span>,
+  <span class="name"><?php print($fields['name']->content); ?></span>,
+  <span class="votes"><?php print(strip_tags($fields['value']->content)); ?></span>.
 </div>
