@@ -67,7 +67,7 @@
 
 
 /*       Cats page        */
-.context-categories section {
+.context-categories section.block {
   width: 29%;
   float: left; 
   margin-bottom: 15px;
