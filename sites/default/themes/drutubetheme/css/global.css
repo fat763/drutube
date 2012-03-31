@@ -138,11 +138,8 @@
 #region-branding .navigation {
     float: left;
     margin-left: 15px;
-    margin-top: 23px;
+    margin-top: 21px;
 }
-
-
-
 
 #zone-footer-wrapper {
   padding-top: 25px;
@@ -151,10 +148,9 @@
   clear: both;
 }
 
-
-
-
-
+#section-header {
+  height: 100px;
+}
 
 #block-menu-menu-bottom-menu .menu li {
   display: inline;
