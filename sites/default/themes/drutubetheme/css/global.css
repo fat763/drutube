@@ -26,6 +26,14 @@
   margin-right: 10px;
 }
 
+.node-video .field-name-sharethis .stButton {
+  margin-left: 17px;
+}
+
+.node-video .field-name-sharethis {
+  margin-top: 90px;
+}
+
 .view .node-video {
   padding: 10px;
   border: solid 1px #CCC;
