@@ -202,3 +202,7 @@
   float: left;
   margin: 20px 20px 0;
 }
+
+.field-label-inline .field-item {
+  margin-right: 5px;
+}
