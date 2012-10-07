@@ -4,7 +4,13 @@
  * Enabling 'diff' module.
  */
 function drutube_misc_update_7000(&$sandbox) {
-  if (!module_exists('diff')) {
-    module_enable(array('diff'));
+  if (!module_exists('diff') && !module_exists('drutube_search')) {
+    module_enable(array('diff', 'drutube_search'));
+  }
+  if (module_exists('features') && module_exists('drutube_search')) {
+    features_include();
+    features_revert(array(
+      'drutube_search' => 'views_view',
+    ));
   }
 }
