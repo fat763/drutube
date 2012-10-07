@@ -1,6 +1,5 @@
 <?php
 
-// $Id: session_api.admin.inc,v 1.2 2009/09/14 23:38:49 jhedstrom Exp $
 
 /**
  * @file

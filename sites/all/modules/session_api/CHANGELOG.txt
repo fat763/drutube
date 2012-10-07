@@ -1,7 +1,10 @@
-; $Id: CHANGELOG.txt,v 1.2 2009/09/14 23:38:49 jhedstrom Exp $
+7.x-1.0
+=======
+- #1233650 - Added API function `session_api_start_session()` to give
+  finer-grained control for sites running Pressflow.
 
-DRUPAL-6--1-2, XXXX-XX-XX
--------------------------
+6.x-1.2
+=======
 - A cookie is now set to track the session ID between log in and log
   out.
 

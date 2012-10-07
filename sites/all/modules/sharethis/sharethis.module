@@ -9,9 +9,9 @@
  *
  * Displays help and module information.
  *
- * @param path
+ * @param path 
  *   Which path of the site we're using to display help
- * @param arg
+ * @param arg 
  *   Array that holds the current path as returned from arg() function
  */
 function sharethis_help($path, $arg) {
@@ -38,42 +38,28 @@ function sharethis_help($path, $arg) {
 function sharethis_permission() {
   return array(
     'administer sharethis' => array(
-      'title' => t('Administer ShareThis'),
+      'title' => t('Administer ShareThis'), 
       'description' => t('Change the settings for how ShareThis behaves on the site.'),
     ),
   );
 }
 
-/**
- * Implements hook_admin.
- *
- * ShareThis Config Menu.
+ /**
+ * This is the main configuration form for the admin page.
  */
-function sharethis_admin() {
+function sharethis_configuration_form($form, &$form_state) {
   // First, setup variables we will need.
   // Get the path variables setup.
   $my_path = drupal_get_path('module', 'sharethis');
   // Load the css and js for our module's configuration.
   drupal_add_css($my_path . '/ShareThisForm.css');
-  drupal_add_js('https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js', 'external'); // @TODO: Do we really need to load jQuery twice?
   drupal_add_js('http://w.sharethis.com/share5x/js/stcommon.js', 'external');  //This is ShareThis's common library - has a serviceList of all the objects that are currently supported.
   drupal_add_js($my_path . '/ShareThisForm.js');
   drupal_add_js($my_path . '/stlib_picker.js');
   drupal_add_css($my_path . '/stlib_picker.css');
-
-  return drupal_get_form('sharethis_form');
-}
-
- /**
- * This is the main configuration form for the admin page.
- */
-function sharethis_form($form, &$form_state) {
-  // First, setup variables we will need.
-  // Get the path variables setup.
-  $my_path = drupal_get_path('module', 'sharethis');
   $current_options_array = sharethis_get_options_array();
   global $base_url;
-
+  
   // Create the variables related to widget choice.
   $widget_type = $current_options_array['widget'];
   $widget_markup = "";
@@ -91,7 +77,7 @@ function sharethis_form($form, &$form_state) {
     $service_string_markup .= "\"" . $key . "\",";
   }
   $service_string_markup = substr($service_string_markup, 0, -1);
-
+  
   // Create an array of node types.
   $node_type_array = node_type_get_types();
   $node_type_options = array();
@@ -105,13 +91,13 @@ function sharethis_form($form, &$form_state) {
   $publisher = $current_options_array['publisherID'];
   // Create the variables for teasers.
   $teaser = $current_options_array['viewMode'] == "1" ? TRUE : FALSE;
-
+  
   $form = array();
   $form['options'] = array(
     '#type' => 'fieldset',
     '#title' => t('Display'),
   );
-  $form['options']['widget_option'] = array(
+  $form['options']['sharethis_widget_option'] = array(
     '#options' => array(
       'st_multi' => t("Multi-Post Widget"),
       'st_direct' => t("Direct-Post Widget")
@@ -123,7 +109,7 @@ function sharethis_form($form, &$form_state) {
     '#prefix' => '<div class="st_widgetContain"><div class="st_widgetPic ' . $widget_markup . '"><div class="st_widgetPicContain"><img src="' . $base_url . '/' . $my_path . '/img/widget.png"></img></div></div>',
     '#suffix' => '</div>'
   );
-  $form['options']['button_option'] = array(
+  $form['options']['sharethis_button_option'] = array(
     '#required' => TRUE,
     '#type' => 'radios',
     '#options' => array(
@@ -138,12 +124,12 @@ function sharethis_form($form, &$form_state) {
     '#prefix' => '<div class="st_widgetContain"><div class="st_spriteCover"><img id="stb_sprite" class="st_buttonSelectSprite ' . $button_choice . '" src="' . $base_url . '/' . $my_path . '/img/preview_sprite.png"></img></div><div class="st_widgetPic"><img class="st_buttonSelectImage" src="' . $base_url . '/' . $my_path . '/img/preview_bg.png"></img></div>',
     '#suffix' => '</div>'
   );
-  $form['options']['service_option'] = array(
+  $form['options']['sharethis_service_option'] = array(
     '#description' => t("<b>Add</b> a service by selecting it on the right and clicking the <i>left arrow</i>.  <b>Remove</b> it by clicking the <i>right arrow</i>.<br /><b>Change the order</b> of services under \"Selected Services\" by using the <i>up</i> and <i>down</i> arrows."),
     '#required' => TRUE,
     '#type' => 'textfield',
     '#prefix' => '<div>',
-    '#suffix' => '</div><div id="myPicker"></div><script type="text/javascript">stlib_picker.setupPicker($("#myPicker"), [' . $service_string_markup . '], drupal_st.serviceCallback);</script>',
+    '#suffix' => '</div><div id="myPicker"></div><script type="text/javascript">stlib_picker.setupPicker(jQuery("#myPicker"), [' . $service_string_markup . '], drupal_st.serviceCallback);</script>',
     '#title' => t("Choose Your Services."),
     '#default_value' => t($service_string)
   );
@@ -166,7 +152,7 @@ function sharethis_form($form, &$form_state) {
     '#group' => 'additional_settings',
     '#description' => t('Configure where the ShareThis widget should appear.'),
   );
-  $form['context']['node_option'] = array(
+  $form['context']['sharethis_node_option'] = array(
     '#title' => t("Node types"),
     '#description' => t('Select which nodes the ShareThis widget should appear on.'),
     '#required' => TRUE,
@@ -174,7 +160,7 @@ function sharethis_form($form, &$form_state) {
     '#options' => $node_type_options,
     '#default_value' => $nodes_selected
   );
-  $form['context']['teaser_option'] = array(
+  $form['context']['sharethis_teaser_option'] = array(
     '#title' => t('Only full view'),
     '#type' => 'checkbox',
     '#default_value' => $teaser ? 1 : 0,
@@ -205,7 +191,7 @@ function sharethis_form($form, &$form_state) {
     '#group' => 'additional_settings',
     '#description' => t('The advanced settings can usually be ignored if you have no need for them.'),
   );
-  $form['advanced']['publisherID'] = array(
+  $form['advanced']['sharethis_publisherID'] = array(
     '#title' => t("Insert a publisher key (optional)."),
     '#description' => t("When you install the module, we create a random publisher key.  You can register the key with ShareThis by contacting customer support.  Otherwise, you can go to <a href='http://www.sharethis.com/account'>ShareThis</a> and create an account.<br />Your official publisher key can be found under 'My Account'.<br />It allows you to get detailed analytics about sharing done on your site."),
     '#type' => 'textfield',
@@ -217,82 +203,34 @@ function sharethis_form($form, &$form_state) {
     '#type' => 'textfield',
     '#default_value' => variable_get('sharethis_twitter_suffix', ''),
   );
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Submit')
-  );
-  return $form;
+  return system_settings_form($form);
 }
 
 /**
- * This is the submit function for sharethis_form
+ * Form submission handler for sharethis_configuration_form().
  */
-function sharethis_form_submit($form, &$form_state) {
-  // Record the widget option.
-  if (isset($form_state['input']['widget_option'])) {
-    variable_set('sharethis_widget_option', $form_state['input']['widget_option']);
-  }
+function sharethis_configuration_form_validate($form, &$form_state) {
+  //Additional filters for the service option input
+  
+  // Sanitize the publisher ID option.  Since it's a text field, remove anything that resembles code
+  $form_state['values']['sharethis_service_option'] = filter_xss($form_state['values']['sharethis_service_option'], array());
 
-  // Record the buttons option.
-  if (isset($form_state['input']['button_option'])) {
-    variable_set('sharethis_button_option', $form_state['input']['button_option']);
-  }
+  //Additional filters for the option extras input
+  $form_state['values']['sharethis_option_extras'] = (isset($form_state['values']['sharethis_option_extras'])) ? $form_state['values']['sharethis_option_extras'] : array();
 
-  // Record the services option.
-  $services = isset($form_state['input']['service_option']) ? $form_state['input']['service_option'] : '';
-  $services = str_replace(";", "", $services);
-  $services = str_replace("\\", "", $services);
-  $services = str_replace("/", "", $services);
-  $services = str_replace("(", "", $services);
-  $services = str_replace(")", "", $services);
-  variable_set('sharethis_service_option', $services);
+  // Implode the node options
+  $form_state['values']['sharethis_node_option'] = implode(',', $form_state['values']['sharethis_node_option']);
 
-  // Save the extra services.
-  $extras = isset($form_state['input']['sharethis_option_extras']) ? $form_state['input']['sharethis_option_extras'] : array();
-  variable_set('sharethis_option_extras', $extras);
+  // Set a default value for the teaser option
+  $form_state['values']['sharethis_teaser_option'] = (isset($form_state['values']['sharethis_teaser_option'])) ? $form_state['values']['sharethis_teaser_option'] : 0;
 
-  // Record the NodeType option.
-  if (isset($form_state['input']['node_option'])) {
-    $types = implode(',', $form_state['input']['node_option']);
-    variable_set('sharethis_node_option', $types);
-  }
+  // Sanitize the publisher ID option.  Since it's a text field, remove anything that resembles code
+  $form_state['values']['sharethis_publisherID'] = filter_xss($form_state['values']['sharethis_publisherID'], array());
 
-  // Record the teaser option.
-  if (isset($form_state['input']['teaser_option'])) {
-    variable_set('sharethis_teaser_option', $form_state['input']['teaser_option']);
-  }
-  else {
-    variable_set('sharethis_teaser_option', 0);
-  }
-
-  // Record the publisher ID option.  Since it's a text field, remove anything that resembles code
-  if (isset($form_state['input']['publisherID'])) {
-    $sanitized = $form_state['input']['publisherID'];
-    $sanitized = str_replace(";", "", $sanitized);
-    $sanitized = str_replace(":", "", $sanitized);
-    $sanitized = str_replace("\\", "", $sanitized);
-    $sanitized = str_replace("/", "", $sanitized);
-    $sanitized = str_replace("(", "", $sanitized);
-    $sanitized = str_replace(")", "", $sanitized);
-    variable_set('sharethis_publisherID', $sanitized);
-  }
-
-  // The location of the widget.
-  if (isset($form_state['input']['sharethis_location'])) {
-    variable_set('sharethis_location', $form_state['input']['sharethis_location']);
-  }
-
-  // The weight of the widget.
-  if (isset($form_state['input']['sharethis_weight'])) {
-    variable_set('sharethis_weight', $form_state['input']['sharethis_weight']);
-  }
-
-  $sharethis_twitter_suffix = isset($form_state['input']['sharethis_twitter_suffix']) ? $form_state['input']['sharethis_twitter_suffix'] : '';
-  variable_set('sharethis_twitter_suffix', $sharethis_twitter_suffix);
-
-  drupal_set_message(t('The configuration options have been saved.'));
+  // Ensure default value for twitter suffix
+  $form_state['values']['sharethis_twitter_suffix'] = (isset($form_state['values']['sharethis_twitter_suffix'])) ? $form_state['values']['sharethis_twitter_suffix'] : '';
 }
-
+ 
  /**
  * Implements hook_menu.
  *
@@ -303,7 +241,7 @@ function sharethis_menu() {
     'title' => 'ShareThis',
     'description' => 'Choose the widget, button family, and services for using ShareThis to share content online.',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('sharethis_admin'),
+    'page arguments' => array('sharethis_configuration_form'),
     'access arguments' => array('administer sharethis')
   );
   return $items;
@@ -315,9 +253,9 @@ function sharethis_menu() {
  * Inserts ShareThis widget code onto each node view.
  * TODO: Want to add the option somewhere to select nodes.
  *
- * @param node
+ * @param node 
  *   The node that is being acted upon
- * @param view_mode
+ * @param view_mode 
  *   The type of view (teaser, full, etc)
  * @param langcode
  *   Information about the language
@@ -329,7 +267,7 @@ function sharethis_node_view($node, $view_mode, $langcode) {
   }
   // First get all of the options for the sharethis widget from the database:
   $data_options = sharethis_get_options_array();
-
+  
   // This looks to see if the path variable has been posted by some rewrite module.
   // This is not super efficient, O(N), but N is often less than 20.
   $is_path = FALSE;
@@ -348,20 +286,19 @@ function sharethis_node_view($node, $view_mode, $langcode) {
 
   // Pathauto integration !
   if (module_exists('pathauto')) {
-    $path_module ='/';
-    $path_module .= drupal_lookup_path('alias',"node/".$node->nid);
+    $path_module = '/' . drupal_lookup_path('alias',"node/" . $node->nid);
   }
 
   global $base_url;
   // Get the full path to insert into the Share Buttons.
   $mPath = $base_url . $path_module;
   $mTitle = $node->title;
-
+  
   // Only display the ShareThis buttons if this node fits all the requirements
   if (strpos($data_options['nodeType'], $node->type) !== FALSE) { // Make sure this is the right type of node.
     if (($data_options['viewMode'] == "1") && ($view_mode == "teaser")) { // If "don't show for teaser" is enabled, and this is a teaser, don't do anything
       // Do nothing.
-    }
+    } 
     else {
       // Check where we want to display the ShareThis widget.
       switch (variable_get('sharethis_location', 'content')) {
@@ -491,7 +428,7 @@ function sharethis_get_button_HTML($data_options, $mPath, $mTitle) {
 
   // Provide the publisher ID.
   $st_js .= "<script type='text/javascript'>stLight.options({publisher:'$publisher_id'});</script>";
-  return $st_spans . $st_js;
+  return '<div class="sharethis-wrapper">' . $st_spans . $st_js . '</div>';
 }
 
 /**
@@ -537,10 +474,20 @@ function sharethis_block_contents() {
  */
 function sharethis_contextual_links_view_alter(&$element, $items) {
   // Add the configuration link for the ShareThis settings on the block itself.
-  if(isset($element['#element']['#block']->module) && $element['#element']['#block']->module == 'sharethis' && $element['#element']['#block']->delta == 'sharethis_block' && user_access('access administration pages')) {
+  if (isset($element['#element']['#block']->module) && $element['#element']['#block']->module == 'sharethis' && $element['#element']['#block']->delta == 'sharethis_block' && user_access('access administration pages')) {
     $element['#links']['sharethis-configure'] = array(
       'title' => t('Configure ShareThis'),
       'href' => 'admin/config/services/sharethis',
     );
   }
+}
+
+/**
+ * Implementation of hook_views_api().
+ */
+function sharethis_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'sharethis') . '/views',
+  );
 }
