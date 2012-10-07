@@ -206,3 +206,7 @@
 .field-label-inline .field-item {
   margin-right: 5px;
 }
+
+.view-video-search .view-empty {
+  margin-top: 20px;
+}
