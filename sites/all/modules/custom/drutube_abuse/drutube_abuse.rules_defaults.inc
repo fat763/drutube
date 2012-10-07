@@ -12,6 +12,7 @@ function drutube_abuse_default_rules_configuration() {
   $items['rules_unpublish_video_node_if_more_then_x_abuse_reported_cloned_'] = entity_import('rules_config', '{ "rules_unpublish_video_node_if_more_then_x_abuse_reported_cloned_" : {
       "LABEL" : "Unpublish video-node if more then X abuse reported",
       "PLUGIN" : "reaction rule",
+      "ACTIVE" : false,
       "TAGS" : [ "abuse" ],
       "REQUIRES" : [ "flag", "rules" ],
       "ON" : [ "flag_flagged_abuse" ],

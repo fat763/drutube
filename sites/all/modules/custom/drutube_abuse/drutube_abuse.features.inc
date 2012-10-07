@@ -8,10 +8,7 @@
  * Implements hook_views_api().
  */
 function drutube_abuse_views_api() {
-  list($module, $api) = func_get_args();
-  if ($module == "views" && $api == "views_default") {
-    return array("version" => "3.0");
-  }
+  return array("version" => "3.0");
 }
 
 /**
@@ -47,18 +44,21 @@ function drutube_abuse_flag_default_flags() {
         2 => '3',
       ),
     ),
-    'show_on_page' => 1,
-    'show_on_teaser' => 0,
+    'weight' => 0,
     'show_on_form' => 0,
     'access_author' => '',
+    'show_on_page' => 1,
+    'show_on_teaser' => 1,
+    'show_contextual_link' => FALSE,
     'i18n' => 0,
-    'api_version' => 2,
     'module' => 'drutube_abuse',
     'locked' => array(
       0 => 'name',
     ),
+    'api_version' => 2,
   );
   return $flags;
+
 }
 
 /**
@@ -71,7 +71,7 @@ function drutube_abuse_node_info() {
       'base' => 'node_content',
       'description' => t('Видео-контент включает код-плеера, автора, теги, событие, комментарии disquess.'),
       'has_title' => '1',
-      'title_label' => t('Title'),
+      'title_label' => t('Заголовок'),
       'help' => '',
     ),
   );
