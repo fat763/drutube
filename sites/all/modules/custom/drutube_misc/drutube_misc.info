@@ -2,4 +2,5 @@ name = Drutube Misc
 description = Custom functionality for Drutube
 core = 7.x
 package = Drutube
+version = 7.x-1.0-beta1
 dependencies[] = vud
