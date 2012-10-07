@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * Enabling 'diff' module.
+ */
+function drutube_misc_update_7000(&$sandbox) {
+  if (!module_exists('diff')) {
+    module_enable(array('diff'));
+  }
+}
