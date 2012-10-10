@@ -10,7 +10,7 @@
 function drutube_voting_field_default_fields() {
   $fields = array();
 
-  // Exported field: 'node-video-field_voting'
+  // Exported field: 'node-video-field_voting'.
   $fields['node-video-field_voting'] = array(
     'field_config' => array(
       'active' => '1',
@@ -20,6 +20,7 @@ function drutube_voting_field_default_fields() {
       'field_name' => 'field_voting',
       'foreign keys' => array(),
       'indexes' => array(),
+      'locked' => '0',
       'module' => 'vud_field',
       'settings' => array(
         'votingapi_tag' => 'vote',
@@ -44,13 +45,14 @@ function drutube_voting_field_default_fields() {
           'module' => 'vud_field',
           'settings' => array(),
           'type' => 'default',
-          'weight' => '8',
+          'weight' => '1',
         ),
         'teaser' => array(
-          'label' => 'above',
+          'label' => 'hidden',
+          'module' => 'vud_field',
           'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
+          'type' => 'default',
+          'weight' => '1',
         ),
       ),
       'entity_type' => 'node',
@@ -67,7 +69,7 @@ function drutube_voting_field_default_fields() {
         'module' => 'vud_field',
         'settings' => array(),
         'type' => 'vud_field_default_widget',
-        'weight' => '9',
+        'weight' => '11',
       ),
     ),
   );

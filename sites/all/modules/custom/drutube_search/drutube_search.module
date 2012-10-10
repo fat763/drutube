@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the drutube_search feature.
+ */
+
+include_once 'drutube_search.features.inc';
