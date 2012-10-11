@@ -36,6 +36,6 @@ function drutubetheme_process_region(&$vars) {
  */
 function drutubetheme_preprocess_breadcrumb(&$vars) {
   if(current_path() == 'video'){
-    $vars['breadcrumb'][1] = str_replace('[all items]', t('Поиск видео'), $vars['breadcrumb'][1]);
+    $vars['breadcrumb'][1] = str_replace('[all items]', t('Video search'), $vars['breadcrumb'][1]);
   }
 }
