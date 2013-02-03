@@ -90,6 +90,8 @@ function vud_theme() {
  * We do this since we do not have standard theme overwrite because
  * is not possible to decide dinamically the path where the template is
  * located(in contrast with function names and template names).
+ *
+ * @fixme: Reimplement theme suggestions.
  */
 function vud_pseudo_theming($vote_entity, $template_type, $plugin, &$variables) {
   // let modules modify variables passed to the template
@@ -100,6 +102,9 @@ function vud_pseudo_theming($vote_entity, $template_type, $plugin, &$variables) 
     $function($template_type, $variables);
   }
 
+  // @fixme: Remove hardcode.
+  $template_file = $plugin['path'] . '/' . $plugin[$template_type . ' template'] . $plugin['extension'];
+  return $template_file;
   // and then provide template suggestions by hand
   $suggestions = module_invoke('vud_' . $vote_entity, 'template_suggestions', $template_type, $plugin, $variables['entity_id']);
   if (empty($suggestions)) {
@@ -113,12 +118,9 @@ function vud_pseudo_theming($vote_entity, $template_type, $plugin, &$variables) 
       $plugin['path'],
       dirname($current_theme->filename),
     );
-    // TODO: Fix this.
+    // @fixme: drupal_discover_template() was removed from core.
     //$template_file = drupal_find_theme_templates($paths, $suggestions, $plugin['extension']);
   }
-
-  // TODO: Remove hardcode.
-  $template_file = $plugin['path'] . '/' . $plugin['widget template'] . $plugin['extension'];
 
   return $template_file;
 }
@@ -182,7 +184,7 @@ function vud_widget_proxy($variables) {
   // Define access per operation, for example when the vote up operation is
   // active this means the down operation should be allowed, as the up vote was
   // already.
-  $up_access = $down_access = FALSE;
+  $up_access = $down_access = $reset_access = FALSE;
   if (user_access('use vote up/down')) {
     $criteria = array(
       'entity_type' => $type,
@@ -197,7 +199,7 @@ function vud_widget_proxy($variables) {
 
       $up_access = $user_vote <= 0;
       $down_access = $user_vote >= 0;
-      $reset_active = vud_access_callback('reset vote up/down votes', $type, $entity_id, NULL, $tag);
+      $reset_access = ($user_vote != 0) && vud_access_callback('reset vote up/down votes', $type, $entity_id, NULL, $tag);
 
       if (!$up_access && !$down_access) {
         // Although implementing modules have requested a not readonly widget,
@@ -220,7 +222,7 @@ function vud_widget_proxy($variables) {
       $variables['class_down'] = 'down-inactive';
       $variables['show_down_as_link'] = TRUE;
     }
-    if ($up_access || $down_access) {
+    if ($reset_access) {
       $variables['show_reset'] = TRUE;
       $variables['class_reset'] = 'reset-active';
     }
@@ -239,7 +241,7 @@ function vud_widget_proxy($variables) {
       $variables['link_down'] = url("vote/$type/$entity_id/-1/$tag/$widget_theme/$token_down/nojs");
       $variables['link_class_down'] .= ' use-ajax';
     }
-    if ($up_access || $down_access) {
+    if ($reset_access) {
       $token_reset = drupal_get_token("votereset/$type/$entity_id/$tag/$widget_theme");
       $variables['link_reset'] = url("votereset/$type/$entity_id/$tag/$widget_theme/$token_reset");
       $variables['link_class_reset'] .= ' use-ajax';
@@ -318,22 +320,20 @@ function vud_widget_proxy($variables) {
  * Proxy votes display function, that hook_theme() calls.
  */
 function vud_votes_proxy($variables) {
-  $plugin = vud_widget_get($widget_theme);
+  $plugin = vud_widget_get($variables['widget_theme']);
   if (empty($plugin) || empty($plugin['votes template'])) {
     return;
   }
 
   $template_file = $plugin['path'] . '/' . $plugin['votes template'] . $plugin['extension'];
-  $variables = array(
-    'plugin' => $plugin,
-    'id' => 'votes-' . $type . '-' . $entity_id,
-  );
+  $variables['plugin'] = $plugin;
+  $variables['id'] = 'votes-' . $variables['type'] . '-' . $variables['entity_id'];
 
   $criteria = array(
-    'entity_type' => $type,
-    'entity_id' => $entity_id,
+    'entity_type' => $variables['type'],
+    'entity_id' => $variables['entity_id'],
     'value_type' => 'points',
-    'tag' => $tag,
+    'tag' => $variables['tag'],
     'function' => 'sum'
   );
 
@@ -358,7 +358,7 @@ function vud_votes_proxy($variables) {
   vud_add_files('css', $plugin);  // Search and add the CSS files.
   vud_add_files('js', $plugin);   // Search and add the JS files.
 
-  $template_file = vud_pseudo_theming($type, 'votes', $plugin, $variables);
+  $template_file = vud_pseudo_theming($variables['type'], 'votes', $plugin, $variables);
 
   // not all widget use votes.tpl.php
   if (function_exists($plugin['render function'])) {
