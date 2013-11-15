@@ -10,13 +10,13 @@
 function drutube_voting_user_default_permissions() {
   $permissions = array();
 
-  // Exported permission: use vote up/down.
+  // Exported permission: 'use vote up/down'.
   $permissions['use vote up/down'] = array(
     'name' => 'use vote up/down',
     'roles' => array(
-      0 => 'administrator',
-      1 => 'anonymous user',
-      2 => 'authenticated user',
+      'administrator' => 'administrator',
+      'anonymous user' => 'anonymous user',
+      'authenticated user' => 'authenticated user',
     ),
     'module' => 'vud',
   );

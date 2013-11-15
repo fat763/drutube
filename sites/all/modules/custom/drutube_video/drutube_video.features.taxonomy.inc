@@ -1,21 +1,21 @@
 <?php
 /**
  * @file
- * drutube_abuse.features.taxonomy.inc
+ * drutube_video.features.taxonomy.inc
  */
 
 /**
  * Implements hook_taxonomy_default_vocabularies().
  */
-function drutube_abuse_taxonomy_default_vocabularies() {
+function drutube_video_taxonomy_default_vocabularies() {
   return array(
     'audience_background' => array(
       'name' => 'Уровень подготовки',
       'machine_name' => 'audience_background',
       'description' => 'Уровень подготовки аудитории, на которую рассчитан доклад',
-      'hierarchy' => '0',
+      'hierarchy' => 0,
       'module' => 'taxonomy',
-      'weight' => '-7',
+      'weight' => -7,
       'rdf_mapping' => array(
         'rdftype' => array(
           0 => 'skos:ConceptScheme',
@@ -36,9 +36,9 @@ function drutube_abuse_taxonomy_default_vocabularies() {
       'name' => 'Автор',
       'machine_name' => 'auhtor',
       'description' => '',
-      'hierarchy' => '0',
+      'hierarchy' => 0,
       'module' => 'taxonomy',
-      'weight' => '0',
+      'weight' => 0,
       'rdf_mapping' => array(
         'rdftype' => array(
           0 => 'skos:ConceptScheme',
@@ -59,9 +59,9 @@ function drutube_abuse_taxonomy_default_vocabularies() {
       'name' => 'Версия ядра',
       'machine_name' => 'core_version',
       'description' => 'Версия ядра Drupal, в контексте которого актуально видео',
-      'hierarchy' => '0',
+      'hierarchy' => 0,
       'module' => 'taxonomy',
-      'weight' => '-6',
+      'weight' => -6,
       'rdf_mapping' => array(
         'rdftype' => array(
           0 => 'skos:ConceptScheme',
@@ -82,9 +82,9 @@ function drutube_abuse_taxonomy_default_vocabularies() {
       'name' => 'Событие',
       'machine_name' => 'event',
       'description' => 'Событие, к которому относится видео.',
-      'hierarchy' => '0',
+      'hierarchy' => 0,
       'module' => 'taxonomy',
-      'weight' => '-10',
+      'weight' => -10,
       'rdf_mapping' => array(
         'rdftype' => array(
           0 => 'skos:ConceptScheme',
@@ -105,9 +105,9 @@ function drutube_abuse_taxonomy_default_vocabularies() {
       'name' => 'Теги',
       'machine_name' => 'tags',
       'description' => '',
-      'hierarchy' => '1',
+      'hierarchy' => 1,
       'module' => 'taxonomy',
-      'weight' => '-5',
+      'weight' => -5,
       'rdf_mapping' => array(
         'rdftype' => array(
           0 => 'skos:ConceptScheme',
@@ -128,9 +128,9 @@ function drutube_abuse_taxonomy_default_vocabularies() {
       'name' => 'Тематика',
       'machine_name' => 'topics',
       'description' => '',
-      'hierarchy' => '0',
+      'hierarchy' => 0,
       'module' => 'taxonomy',
-      'weight' => '-9',
+      'weight' => -9,
       'rdf_mapping' => array(
         'rdftype' => array(
           0 => 'skos:ConceptScheme',
@@ -151,9 +151,9 @@ function drutube_abuse_taxonomy_default_vocabularies() {
       'name' => 'Тип видео',
       'machine_name' => 'video_type',
       'description' => 'Доклад, Скринкаст, etc',
-      'hierarchy' => '0',
+      'hierarchy' => 0,
       'module' => 'taxonomy',
-      'weight' => '-8',
+      'weight' => -8,
       'rdf_mapping' => array(
         'rdftype' => array(
           0 => 'skos:ConceptScheme',

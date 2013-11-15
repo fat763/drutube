@@ -7,8 +7,8 @@
 /**
  * Implements hook_views_api().
  */
-function drutube_abuse_views_api() {
-  return array("version" => "3.0");
+function drutube_abuse_views_api($module = NULL, $api = NULL) {
+  return array("api" => "3.0");
 }
 
 /**
@@ -20,7 +20,7 @@ function drutube_abuse_flag_default_flags() {
   $flags['abuse'] = array(
     'content_type' => 'node',
     'title' => 'Жалобы',
-    'global' => '0',
+    'global' => 0,
     'types' => array(
       0 => 'video',
     ),
@@ -34,14 +34,14 @@ function drutube_abuse_flag_default_flags() {
     'link_type' => 'toggle',
     'roles' => array(
       'flag' => array(
-        0 => '1',
-        1 => '2',
-        2 => '3',
+        0 => 1,
+        1 => 2,
+        2 => 3,
       ),
       'unflag' => array(
-        0 => '1',
-        1 => '2',
-        2 => '3',
+        0 => 1,
+        1 => 2,
+        2 => 3,
       ),
     ),
     'weight' => 0,
@@ -51,29 +51,12 @@ function drutube_abuse_flag_default_flags() {
     'show_on_teaser' => 1,
     'show_contextual_link' => FALSE,
     'i18n' => 0,
+    'api_version' => 2,
     'module' => 'drutube_abuse',
     'locked' => array(
       0 => 'name',
     ),
-    'api_version' => 2,
   );
   return $flags;
 
-}
-
-/**
- * Implements hook_node_info().
- */
-function drutube_abuse_node_info() {
-  $items = array(
-    'video' => array(
-      'name' => t('Video'),
-      'base' => 'node_content',
-      'description' => t('Видео-контент включает код-плеера, автора, теги, событие, комментарии disquess.'),
-      'has_title' => '1',
-      'title_label' => t('Заголовок'),
-      'help' => '',
-    ),
-  );
-  return $items;
 }

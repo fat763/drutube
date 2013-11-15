@@ -27,6 +27,6 @@
 <div class="title"><?php print($fields['title']->content ); ?></div>
 <div class="fields-wrapper">
   <span class="changed"><?php print($fields['changed']->content); ?></span>,
-  <span class="name"><?php print($fields['name']->content); ?></span>,
+  <span class="name"><?php print($fields['field_author']->content); ?></span>,
   <span class="votes"><?php print(strip_tags($fields['value']->content)); ?></span>.
 </div>

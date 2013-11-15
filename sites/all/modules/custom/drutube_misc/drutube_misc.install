@@ -14,3 +14,55 @@ function drutube_misc_update_7000(&$sandbox) {
     ));
   }
 }
+
+/**
+ * Revert 'drutube_video' and 'drutube_abuse' features
+ */
+function drutube_misc_update_7001(&$sandbox) {
+  cache_clear_all();
+
+  if (!module_exists('features')) {
+    module_enable(array('features'));
+  }
+
+  if (!module_exists('drutube_video')) {
+    module_enable(array('drutube_video'));
+  }
+
+  if (!module_exists('drutube_abuse')) {
+    module_enable(array('drutube_abuse'));
+  }
+
+  if (module_exists('features') && module_exists('drutube_video') && module_exists('drutube_abuse')) {
+    module_load_include('inc', 'features', 'features.export');
+    features_include();
+    features_rebuild();
+
+    features_revert(array(
+      'drutube_video' => array(
+        'ctools',
+        'ds_field_settings',
+        'ds_fields',
+        'ds_layout_settings',
+        'field_base',
+        'field_instance',
+        'node',
+        'page_manager_pages',
+        'taxonomy',
+        'views_view'
+      ),
+      'drutube_abuse' => array(
+        'ctools',
+        'ds_field_settings',
+        'ds_fields',
+        'ds_layout_settings',
+        'field_base',
+        'field_instance',
+        'node',
+        'page_manager_pages',
+        'taxonomy',
+        'views_view'
+      ),
+    ));
+  }
+}

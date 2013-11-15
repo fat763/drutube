@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * drutube_abuse.features.field.inc
+ * drutube_video.features.field.inc
  */
 
 /**
  * Implements hook_field_default_fields().
  */
-function drutube_abuse_field_default_fields() {
+function drutube_video_field_default_fields() {
   $fields = array();
 
   // Exported field: 'node-video-field_author'.
